@@ -14,14 +14,104 @@
 		<!-- Use protocol relative urls that way if the browser is viewing the page via HTTPS the js/css file will be requested using the HTTPS protocol -->
 		<link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/calcite/calcite.css">
 	
-        <link rel="stylesheet"  href="//js.arcgis.com/3.11/esri/css/esri.css">
+		<link rel="stylesheet"  href="js/arcgis/3.10/js/esri/css/esri.css">
+        <!--<link rel="stylesheet"  href="//js.arcgis.com/3.11/esri/css/esri.css">-->
 		<!-- Load any application specific styles -->
 		<link rel="stylesheet" href="css/styles.css">
 		<!--[if IE 8]>
 			<link rel="stylesheet" href="css/ie.css">
 		<![endif]-->
+
+
+
+<!-- The JavaScript -->
+        <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
+        <script type="text/javascript">
+
+        	var contador = 0;
+            function popup() {
+               
+                    $('#overlay').fadeIn('fast',function(){
+                        $('#box').animate({'top':'160px'},200);
+                        
+                    });
+                    $('#boxclose').click(function(){
+                    	contador++;
+                    	
+		                    $('#box').animate({'top':'-200px'},500,function(){
+		                        $('#overlay').fadeOut('fast');
+		                    });
+
+		                    if (contador <2) {
+			                    $('#overlay').fadeIn('fast',function(){
+			                        $('#box2').animate({'top':'160px'},500);
+			                    });
+
+                    	};
+                });
+                
+                
+
+            }
+            function clickTexto(){
+            	document.getElementById("panelTool_edit").click();
+            }
+        </script>
+
+
+
+
 	</head>
-	<body class="calcite app-loading no-touch">
+
+
+
+    <style>
+
+        /* Style for overlay and box */
+        .overlay{
+            background:transparent url(images/overlay.png) repeat top left;
+            position:fixed;
+            top:0px;
+            bottom:0px;
+            left:0px;
+            right:0px;
+            z-index:100;
+        }
+        .box{
+            position:fixed;
+            top:-200px;
+            left:4%;
+            background-color: rgba(14, 100, 165, 0.901961);
+            color:#7F7F7F;
+            padding:20px;
+            border:2px solid #ccc;
+            -moz-border-radius: 20px;
+            -webkit-border-radius:20px;
+            -khtml-border-radius:20px;
+            -moz-box-shadow: 0 1px 5px #333;
+            -webkit-box-shadow: 0 1px 5px #333;
+            z-index:101;
+        }
+        .box p{
+        	color: white;
+        }
+        a.boxclose{
+            float:right;
+            width:20px;
+            height:20px;
+            background:transparent url(images/close.png) repeat top left;
+            margin-top:-10px;
+            margin-right:-12px;
+            cursor:pointer;
+        }
+    </style>
+
+
+
+
+	<body class="calcite app-loading no-touch" language=JavaScript onLoad="popup()">
+
+
 		<!-- Loading Indicator -->
 		<div class="loading-indicator">
 			<div class="loading-message" id="loading_message"></div>
@@ -43,17 +133,26 @@
 				<div class="fc" id="panelText">
 					
 				</div>
-				<div id="panelSearch">
-					<div id="panelGeocoder"></div>
-				</div>
+				
 				<div id="panelMenu" class="icon-menu icon-color"></div>
 			</div>
 
 			<!-- Panel Tools -->
-			<div id="panelTools">
+			<div id="panelTools"><div id="texto" onclick="clickTexto()" style="cursor:pointer">Reporte un olor en bogotá</div>
 				<!--Tools are created programatically-->
 			</div>
+        </div>
 
+
+        <!-- The overlay and the box -->
+        <div class="overlay" id="overlay" style="display:none;"></div>
+        <div class="box" id="box">
+            <a class="boxclose" id="boxclose"></a>
+            
+            <p>
+                Seleccione el olor que desea reportar y ubíquelo en el mapa
+            </p>
+        </div>
 		</div>
 
 		<script type="text/javascript">
@@ -70,7 +169,7 @@
             }]
          };
 		</script>
-		<script type="text/javascript" src="//js.arcgis.com/3.11/"></script>
+		<script type="text/javascript" src="js/arcgis/3.10/init.js"></script>
 		<script type="text/javascript">
          require(["application/template", "application/main"], function(Template, Main) {
             // create the template. This will take care of all the logic required for template applications

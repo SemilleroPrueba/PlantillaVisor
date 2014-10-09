@@ -19,7 +19,7 @@ define({
     //Default configuration settings for the application. This is where you'll define things like a bing maps key,
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
-    "webmap": "f5b13dbed07c46cdb783cf361833aa6b",
+    "webmap": "de60bfc389a34e8ead257a1b319970f3",
     "oauthappid": null, //"AFTKRmv16wj14N3z",
     //Group templates must support a group url parameter. This will contain the id of the group.
     //group: "",
@@ -42,7 +42,7 @@ define({
     //Theme defines the background color of the title area and tool dialog 
     //Color defines the text color for the title and details. Note that 
     //both these values must be specified as hex colors. 
-    "theme": "#80ab00",
+    "theme": "#0e64a5",
     "color": "#fff",
     //Specify the tool icon color for the tools on the toolbar and the menu icon.
     // Valid values are white and black.
@@ -50,23 +50,23 @@ define({
     "logo": null, 
     //Set of tools that will be added to the toolbar 
     "tools": [
-        {"name": "legend", "enabled": true}, 
-        {"name": "bookmarks", "enabled": true},
-        {"name": "layers", "enabled": true}, 
-        {"name": "basemap", "enabled": true}, 
-        {"name": "overview", "enabled": true},
-        {"name": "measure", "enabled": true}, 
+        {"name": "legend", "enabled": false}, 
+        {"name": "bookmarks", "enabled": false},
+        {"name": "layers", "enabled": false}, 
+        {"name": "basemap", "enabled": false}, 
+        {"name": "overview", "enabled": false},
+        {"name": "measure", "enabled": false}, 
         {"name": "edit", "enabled": true, "toolbar": false}, 
-        {"name": "print", "enabled": true, "legend": true, "layouts":false, "format":"pdf"}, 
-        {"name": "details", "enabled": true},
-        {"name": "share", "enabled": true}
+        {"name": "print", "enabled": false, "legend": false, "layouts":false, "format":"pdf"}, 
+        {"name": "details", "enabled": false},
+        {"name": "share", "enabled": false}
     ], 
     //Set the active tool on the toolbar. Note home and locate can't be the active tool. 
-    "activeTool": "legend",
+    "activeTool": "edit",
     //Add the geocoding tool next to the title bar
-    "search": true,
+    "search": false,
     //Add the home extent button to the toolbar 
-    "home": true,
+    "home": false,
     //Add the geolocation button on the toolbar. Only displayed if browser supports geolocation
     "locate": true,
     //Specify a title for the application. If not provided the web map title is used. 

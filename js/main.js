@@ -13,6 +13,18 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
+
+ function isDescendant(parent, child) {
+     var node = child.parentNode;
+     while (node != null) {
+         if (node == parent) {
+             return true;
+         }
+         node = node.parentNode;
+     }
+     return false;
+}
+var intocable = false;
 define(["dojo/ready", "dojo/json", "dojo/_base/array", "dojo/_base/Color", "dojo/_base/declare", "dojo/_base/lang", "dojo/dom", "dojo/dom-geometry", "dojo/dom-attr", "dojo/dom-class", "dojo/dom-construct", "dojo/dom-style", "dojo/on", "dojo/Deferred", "dojo/promise/all", "dojo/query", "dijit/registry", "dijit/Menu", "dijit/CheckedMenuItem", "application/toolbar", "application/has-config", "esri/arcgis/utils", "esri/dijit/HomeButton", "esri/dijit/LocateButton", "esri/dijit/Legend", "esri/dijit/BasemapGallery", "esri/dijit/Measurement", "esri/dijit/OverviewMap", "esri/geometry/Extent", "esri/layers/FeatureLayer", "application/TableOfContents", "application/ShareDialog"], function (
 ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, domConstruct, domStyle, on, Deferred, all, query, registry, Menu, CheckedMenuItem, Toolbar, has, arcgisUtils, HomeButton, LocateButton, Legend, BasemapGallery, Measurement, OverviewMap, Extent, FeatureLayer, TableOfContents, ShareDialog) {
 
@@ -99,12 +111,31 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
         },
 
         // Map is ready
-        _mapLoaded: function () {
+        _mapLoaded: function () {            
             query(".esriSimpleSlider").style("backgroundColor", this.theme.toString());
             // remove loading class from body
             domClass.remove(document.body, "app-loading");
             on(window, "orientationchange", lang.hitch(this, this._adjustPopupSize));
             this._adjustPopupSize();
+
+            var texto = document.getElementById('texto');
+            var padre = document.getElementById("panelTools");
+            padre.removeChild(texto);
+            padre.appendChild(texto);            
+            var popup = document.getElementById('mapDiv_root').childNodes[2].childNodes[0].childNodes[2];
+            var button= document.createElement('input');
+            button.setAttribute('id','mybutton');
+            button.setAttribute('type','button');
+            button.setAttribute('name','Finalizar');
+            button.setAttribute('value','Enviar');
+            button.style.display = "none";
+            popup.appendChild(button);
+            button.onclick = function () {
+                intocable=false;
+              document.getElementById('mapDiv_root').childNodes[2].style.visibility="hidden";
+              document.getElementById("mybutton").style.display = "none";
+              document.getElementById('mapDiv_root').childNodes[2].childNodes[0].childNodes[0].childNodes[0].childNodes[5].style.display="";
+            };
         },
 
         // Create UI
@@ -202,7 +233,7 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
                         } else {
                             //activate the popup and destroy editor if necessary
                             this._destroyEditor();
-                            this.map.setInfoWindowOnClick(true);
+                            this.map.setInfoWindowOnClick(false);
                         }
                     }));
 
@@ -305,6 +336,12 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
             return deferred.promise;
         },
         _createEditor: function () {
+            if(!intocable){
+                document.getElementById("panelPages").style.visibility = "visible";
+            if (this.editor) {
+                this.editor.destroy();
+                this.editor = null;
+            }
             var deferred = new Deferred();
             //Dynamically load since many apps won't have editable layers
             require(["application/has-config!edit?esri/dijit/editing/Editor"], lang.hitch(this, function (Editor) {
@@ -352,15 +389,23 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
                 this.editor.startup();
                 deferred.resolve(true);
 
+                document.getElementById("pageBody_edit").onclick=function(){
+                intocable=true;
+                document.getElementById("panelPages").style.visibility = "hidden";
+                   document.getElementById("mybutton").style.display = "";
+                   document.getElementById('mapDiv_root').childNodes[2].childNodes[0].childNodes[0].childNodes[0].childNodes[5].style.display="none";
+                   document.getElementById("mapDiv").onclick=function(){
+                        document.getElementById('panelTool_edit').click();
+                        document.getElementById("mapDiv").onclick="";
+                    };
+                };
+
             }));
             return deferred.promise;
-
+            }
         },
         _destroyEditor: function () {
-            if (this.editor) {
-                this.editor.destroy();
-                this.editor = null;
-            }
+            
 
         },
         _addLayers: function (tool, toolbar, panelClass) {
@@ -818,6 +863,7 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
                 }
 
 
+
                 geoLocate.startup();
 
             }
@@ -939,6 +985,11 @@ ready, JSON, array, Color, declare, lang, dom, domGeometry, domAttr, domClass, d
                 this.config.title = title;
                 document.title = title;
                 dom.byId("panelText").innerHTML = title;
+
+
+
+
+                dom.byId("panelText").style.display = "block !important";
                 this.config.response = response;
                 window.config = this.config;
 
